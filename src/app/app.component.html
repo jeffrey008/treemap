@@ -1,18 +1,17 @@
 <label for="json">Data</label>
-
-
-<textarea id="json" [(ngModel)]="json"></textarea>
+<textarea id="json" [(ngModel)]="json" style="height: 112px;width: 369px;"></textarea>
 
 <label for="numOfRows">Row Number</label>
-<input id="numOfRows" type="number" [(ngModel)]="row"/>
+<input id="numOfRows" type="number" [(ngModel)]="row" min="1"/>
 
 <button (click)="onClick()">Generate</button>
 
-<div style="width: 100%">
-  <ng-container *ngFor="let a of arr">
-    <div style="width: 50px; height: 50px;" [ngStyle]="{'background-color': a.value > 0 ? 'green' : 'red'}">
-
+<br/>
+<b>Result</b>
+<div class="treemap">
+  <div class="row" *ngFor="let row of arr" [ngStyle]="{height: rowHeight + '%'}">
+    <div class="tree" *ngFor="let item of row" [ngStyle]="{'background-color': item.value > 0 ? 'lightgreen' : 'lightcoral', width: item.width + '%'}">
+      <div>{{item.name}}<br/>{{item.value | percent: '1.0-2'}}</div>
     </div>
-
-  </ng-container>
+  </div>
 </div>
