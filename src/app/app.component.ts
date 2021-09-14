@@ -7,4 +7,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'treemap';
+  json: string = '';
+  row: number = 1;
+  arr: any[] = [];
+
+  onClick() {
+    this.arr = JSON.parse(this.json);
+  }
 }
