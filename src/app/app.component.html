@@ -1,25 +1,35 @@
-<div class="form">
-  <label for="json">Data</label>
-  <div style="height:600px;">
-    <json-editor [options]="editorOptions" [data]="json"></json-editor>
+<div class="nav">Treemap Generator</div>
+
+<div style="display: flex;">
+  <div class="form">
+    <form [formGroup]="form" (submit)="onClick()">
+      <json-editor [options]="editorOptions" formControlName="data">
+      </json-editor>
+      <label for="numOfRows">Row Number</label>
+      <input id="numOfRows" type="number" formControlName="row" min="1"/>
+      <br>
+      <button type="submit">Generate</button>
+    </form>
+    <div *ngIf="form.errors?.tooLengthy" class="cross-validation-error-message alert alert-danger">
+      Array length cannot be more than 50.
+    </div>
+    <div *ngIf="form.errors?.tooLengthy" class="cross-validation-error-message alert alert-danger">
+      Name  must be string and less than 50 characters.
+    </div>
+
   </div>
 
-  <!--<textarea id="json" [(ngModel)]="json" style="height: 112px;width: 369px;"></textarea>-->
-
-  <label for="numOfRows">Row Number</label>
-  <input id="numOfRows" type="number" [(ngModel)]="row" min="1"/>
-
-  <button (click)="onClick()">Generate</button>
-</div>
-
-<br/>
-<div class="result">
-  <b>Result</b>
-  <div class="treemap">
-    <div class="row" *ngFor="let row of arr" [ngStyle]="{height: rowHeight + '%'}">
-      <div class="tree" *ngFor="let item of row" [ngStyle]="{'background-color': item.value > 0 ? 'lightgreen' : 'lightcoral', width: item.width + '%'}">
-        <div>{{item.name}}<br/>{{item.value | percent: '1.0-2'}}</div>
+  <br/>
+  <div class="result">
+    <b>Result</b>
+    <div class="treemap">
+      <div class="row" *ngFor="let row of arr" [ngStyle]="{height: rowHeight + '%'}">
+        <div class="tree" *ngFor="let item of row"
+             [ngStyle]="{'background-color': item.value > 0 ? 'lightgreen' : 'lightcoral', width: item.width + '%'}">
+          <div>{{item.name}}<br/>{{item.value | percent: '1.0-2'}}</div>
+        </div>
       </div>
     </div>
   </div>
 </div>
+

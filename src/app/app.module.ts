@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { BrowserModule } from '@angular/platform-browser';
 import {NgJsonEditorModule} from "ang-jsoneditor";
 
@@ -9,11 +9,12 @@ import { AppComponent } from './app.component';
   declarations: [
     AppComponent
   ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    NgJsonEditorModule
-  ],
+    imports: [
+        BrowserModule,
+        FormsModule,
+        NgJsonEditorModule,
+        ReactiveFormsModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

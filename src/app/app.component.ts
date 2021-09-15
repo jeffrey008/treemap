@@ -1,5 +1,21 @@
 import {Component, OnInit} from '@angular/core';
 import {JsonEditorOptions} from "ang-jsoneditor";
+import {AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, ValidatorFn} from "@angular/forms";
+
+export const jsonValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  const json = <FormArray>control.get('data');
+
+  const error: ValidationErrors = {};
+  if (json.length > 50) {
+    error['tooLengthy'] = true
+  }
+  if (json.value.some((d:any) => typeof d.name !== 'string' || d.name.length >= 50)) {
+    error['nameError'] = true
+  }
+
+  return error ? error : null;
+};
+
 
 @Component({
   selector: 'app-root',
@@ -22,93 +38,31 @@ export class AppComponent implements OnInit {
   row: number = 4;
   rowHeight: number = 0;
   arr: any[] = [];
+  form: FormGroup;
 
-  constructor() {
+  constructor(private fb: FormBuilder) {
     this.editorOptions = new JsonEditorOptions()
     this.editorOptions.modes = ['code', 'tree'];
     this.editorOptions.expandAll = true;
     this.editorOptions.search = false;
+
+    this.form = this.fb.group({
+      data: [this.json,],
+      row: 4
+    }, { validators: jsonValidator });
   }
 
   ngOnInit() {
     this.onClick()
   }
 
-  // onClick() {
-  //   this.rowHeight = 100 / this.row;
-  //   // sort items by weight desc
-  //   let sorted = this.json.sort((a: any, b: any) => {
-  //     return b.weight - a.weight
-  //   });
-  //   let totalWeight = sorted.reduce(((pre: any, cur: any) => pre + cur.weight), 0);
-  //   let weightPerRow = Math.max(sorted[0].weight, Math.ceil(totalWeight / this.row));
-  //   console.log('totalWeight', totalWeight)
-  //   console.log('weightPerRow', weightPerRow)
-  //   this.arr = Array.from({length: this.row}, e => Array());
-  //   let j = 0;
-  //   let remainingItemCount = sorted.length;
-  //   for (let i = 0; i < this.arr.length; i++) {
-  //     let row = this.arr[i];
-  //     let currentWeight = 0
-  //     while (j < sorted.length) {
-  //       let item = sorted[j];
-  //
-  //       // if number of remaining EMPTY row == number of remaining items, fill empty row with 1 item
-  //       if (this.arr.filter(a => a.length === 0).length === remainingItemCount) {
-  //         if (row.length == 0) {
-  //           item.filled = true
-  //           item.width = item.weight / weightPerRow * 100;
-  //           row.push(item);
-  //           j++
-  //           remainingItemCount--;
-  //         }
-  //         break;
-  //       }
-  //
-  //       if (currentWeight + item.weight <= weightPerRow) {
-  //         item.filled = true
-  //         item.width = item.weight / weightPerRow * 100;
-  //         row.push(item);
-  //         j++
-  //         remainingItemCount--;
-  //         currentWeight += item.weight;
-  //         // next row if current row is full
-  //         if (currentWeight == weightPerRow) {
-  //           break;
-  //         }
-  //       } else {
-  //         break;
-  //       }
-  //     }
-  //   }
-  //   // it is possible that remaining item with smaller weight haven't filled
-  //   if (remainingItemCount > 0) {
-  //     for (let i = 0; i < sorted.length; i++) {
-  //       let item = sorted[i];
-  //
-  //       if (item.filled) {
-  //         continue;
-  //       }
-  //       for (let j = 0; j < this.arr.length; j++) {
-  //         let row = this.arr[j];
-  //         let currentWeight = row.reduce(((pre: any, cur: any) => pre + cur.weight), 0);
-  //
-  //         if (currentWeight + item.weight <= weightPerRow) {
-  //           item.filled = true
-  //           item.width = item.weight / weightPerRow * 100;
-  //           row.push(item);
-  //           remainingItemCount--;
-  //           currentWeight += item.weight;
-  //           break;
-  //         }
-  //       }
-  //     }
-  //     console.log(this.arr)
-  //   }
-  // }
 
   onClick() {
-      this.rowHeight = 100 / this.row;
+    if(!this.form.valid){
+      return;
+    }
+
+    this.rowHeight = 100 / this.row;
 
     let sorted = this.json.sort((a: any, b: any) => {
       return b.weight - a.weight
