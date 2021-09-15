@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
+import {FormsModule} from "@angular/forms";
 import { BrowserModule } from '@angular/platform-browser';
+import {NgJsonEditorModule} from "ang-jsoneditor";
 
 import { AppComponent } from './app.component';
-import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -10,7 +11,8 @@ import {FormsModule} from "@angular/forms";
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
+    NgJsonEditorModule
   ],
   providers: [],
   bootstrap: [AppComponent]
