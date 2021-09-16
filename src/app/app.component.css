@@ -26,6 +26,10 @@
   margin-right: auto;
 }
 
+.error-message {
+  color: red;
+}
+
 .result {
   width: 50%;
 }

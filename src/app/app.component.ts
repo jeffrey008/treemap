@@ -6,11 +6,26 @@ export const jsonValidator: ValidatorFn = (control: AbstractControl): Validation
   const json = <FormArray>control.get('data');
 
   const error: ValidationErrors = {};
-  if (json.length > 50) {
+  if (json.value.length > 50) {
     error['tooLengthy'] = true
   }
   if (json.value.some((d:any) => typeof d.name !== 'string' || d.name.length >= 50)) {
     error['nameError'] = true
+  }
+  if (json.value.some((d:any) => !Number.isInteger(d.weight))) {
+    error['weightError'] = true
+  }
+
+  return error ? error : null;
+};
+
+export const rowValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  const json = <FormArray>control.get('data')?.value;
+  const row = control.get('row')?.value;
+
+  const error: ValidationErrors = {};
+  if (row > json.length) {
+    error['rowError'] = true
   }
 
   return error ? error : null;
@@ -49,7 +64,7 @@ export class AppComponent implements OnInit {
     this.form = this.fb.group({
       data: [this.json,],
       row: 4
-    }, { validators: jsonValidator });
+    }, { validators: [jsonValidator, rowValidator] });
   }
 
   ngOnInit() {
@@ -61,6 +76,9 @@ export class AppComponent implements OnInit {
     if(!this.form.valid){
       return;
     }
+
+    this.json = this.form.getRawValue().data;
+    this.row = this.form.getRawValue().row;
 
     this.rowHeight = 100 / this.row;
 

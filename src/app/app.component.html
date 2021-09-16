@@ -3,6 +3,7 @@
 <div style="display: flex;">
   <div class="form">
     <form [formGroup]="form" (submit)="onClick()">
+      <label>Data</label>
       <json-editor [options]="editorOptions" formControlName="data">
       </json-editor>
       <label for="numOfRows">Row Number</label>
@@ -10,11 +11,17 @@
       <br>
       <button type="submit">Generate</button>
     </form>
-    <div *ngIf="form.errors?.tooLengthy" class="cross-validation-error-message alert alert-danger">
+    <div *ngIf="form.errors?.tooLengthy" class="error-message">
       Array length cannot be more than 50.
     </div>
-    <div *ngIf="form.errors?.tooLengthy" class="cross-validation-error-message alert alert-danger">
-      Name  must be string and less than 50 characters.
+    <div *ngIf="form.errors?.nameError" class="error-message">
+      Name must be string and less than 50 characters.
+    </div>
+    <div *ngIf="form.errors?.weightError" class="error-message">
+      Weight must be integer.
+    </div>
+    <div *ngIf="form.errors?.rowError" class="error-message">
+      Row must be less than or equal to array length.
     </div>
 
   </div>
