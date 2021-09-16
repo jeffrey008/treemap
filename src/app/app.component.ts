@@ -24,6 +24,9 @@ export const rowValidator: ValidatorFn = (control: AbstractControl): ValidationE
   const row = control.get('row')?.value;
 
   const error: ValidationErrors = {};
+  if (row <= 0) {
+    error['rowZero'] = true
+  }
   if (row > json.length) {
     error['rowError'] = true
   }

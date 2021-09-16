@@ -20,6 +20,9 @@
     <div *ngIf="form.errors?.weightError" class="error-message">
       Weight must be integer.
     </div>
+    <div *ngIf="form.errors?.rowZero" class="error-message">
+      Row must be greater zero.
+    </div>
     <div *ngIf="form.errors?.rowError" class="error-message">
       Row must be less than or equal to array length.
     </div>
